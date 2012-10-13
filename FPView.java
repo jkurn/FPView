@@ -180,7 +180,7 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 				// problem -> outputing the viewpoint by syso?
 				if (viewList.size() > 0) {
 					currentViewPoint = ((currentViewPoint + 1) % viewList.size());
-					
+
 					ViewPoint v = viewList.get(currentViewPoint);
 					viewpos = v.getViewerPos();
 					viewdir = v.getViewerDir();
@@ -246,8 +246,34 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		prevy = evt.getY();
 	}
 
-	// Do view changing.
 	public void mouseDragged(MouseEvent evt) {
+		// finds the current x and y
+		int currX = evt.getX();
+		int currY = evt.getY();
+
+		int diffX = prevx - currX;
+		int diffY = prevy - currY;
+
+		double niceScalingRate = 0.02;
+
+		if (evt.isMetaDown()) {
+			//using right button click (i.e. zooming mode)
+			
+			//scale the viewpos to be zooming
+			viewpos = viewpos.add(viewpos.scale(diffY * niceScalingRate));     // !! DOES NOT DO THE SAME THING !!
+		} else {
+			//using left button click (i.e. panning mode)
+			
+			// {Both of these works for diagonal too} 
+			//looking up and down changes viewdir just by increments
+			viewdir.y += (diffY * niceScalingRate);
+			//looking left and right rotates viewdir in y axis
+			viewdir = viewdir.rotatey(diffX * niceScalingRate);
+
+		}
+		// re-update prevx and prevy
+		prevx = currX;
+		prevy = currY;
 	}
 
 }
