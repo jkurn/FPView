@@ -3,6 +3,7 @@ import java.util.*;
 import javax.media.opengl.*;
 import com.sun.opengl.util.*;
 
+/** THIS FILE HAS CHANGED **/
 public class Avatar {
 	public static final double height = 80;
 	final double moveStep = 2;

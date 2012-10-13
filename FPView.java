@@ -17,6 +17,7 @@ import javax.media.opengl.*;
 import javax.media.opengl.glu.*;
 import com.sun.opengl.util.*;
 
+/** THIS FILE HAS CHANGED **/
 public class FPView extends Frame implements GLEventListener, KeyListener, MouseListener, MouseMotionListener {
 
 	FPShapeList shapeList = null; // List of shapes that we have to render
@@ -177,14 +178,11 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 			if (viewType == THIRD_PERSON_VIEW) {
 				// cycle through viewpoints, by cycling list of viewPoints 
 				ArrayList<ViewPoint> viewList = shapeList.getViews();
-				// problem -> outputing the viewpoint by syso?
 				if (viewList.size() > 0) {
 					currentViewPoint = ((currentViewPoint + 1) % viewList.size());
-
 					ViewPoint v = viewList.get(currentViewPoint);
 					viewpos = v.getViewerPos();
 					viewdir = v.getViewerDir();
-					System.out.println(viewList.get(currentViewPoint));
 				}
 			}
 		}
@@ -204,6 +202,7 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		if (evt.getKeyChar() == 'a') {
 			// looks left
 			avatar.rotate(4);
+			
 		}
 		if (evt.getKeyChar() == 'd') {
 			// looks right
