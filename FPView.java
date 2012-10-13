@@ -21,30 +21,30 @@ public class FPView extends Frame implements GLEventListener, KeyListener,
 		MouseListener, MouseMotionListener {
 
 	FPShapeList shapeList = null; // List of shapes that we have to render
-
+	
+	ArrayList<ViewPoint> viewList = null; // Create a list of views
+	private int currentViewPoint;
+	
 	int appHeight = 400; // Height of the browsing window
 	int appWidth = 400; // Width of the browsing window
-
 	int prevx = 0; // Previously observed x value of mouse click.
 	int prevy = 0; // Previously observed y value of mouse click.
-
 	GLCanvas glc = null;
-
 	Vector3D viewpos = new Vector3D(10, 60, 30); // Default viewing position
 	Vector3D viewdir = new Vector3D(1, 0, 1); // Default viewing direction
-												// (diagonal across world)
-
+	// (diagonal across world)
 	Avatar avatar; //
-
 	static final int FIRST_PERSON_VIEW = 1;
 	static final int THIRD_PERSON_VIEW = 2;
-	int viewType = THIRD_PERSON_VIEW; // Is view from avatar, or is it 3rd
-										// person view?
+	int viewType = THIRD_PERSON_VIEW; 
+	
 
 	public FPView(String filename) {
 
 		super("Floor Plan Viewer: " + filename); // Create window with title
 		shapeList = new FPShapeList();
+		viewList = shapeList.getViews();
+		currentViewPoint = 0;
 		try {
 			shapeList.read(filename);
 		} catch (Exception e) {
@@ -180,9 +180,21 @@ public class FPView extends Frame implements GLEventListener, KeyListener,
 				viewType = FIRST_PERSON_VIEW;
 			}
 		}
+		
+		if (evt.getKeyChar() == 'v') {
+			if (viewType == THIRD_PERSON_VIEW) {
+				// cycle through viewpoints, by cycling list of viewPoints in arraylist
+				if (!viewList.isEmpty()) {
+					currentViewPoint = ((currentViewPoint + 1) % viewList.size());
+					System.out.println(viewList.get(currentViewPoint));
+				}
+			}
+		}
 
 		if (evt.getKeyChar() == 'p') {
-			System.out.println(new ViewPoint(viewpos, viewdir));
+			viewList.add(new ViewPoint(viewpos, viewdir));
+			currentViewPoint = viewList.size(); 
+			System.out.println(viewList.get(currentViewPoint));
 		}
 		if (evt.getKeyChar() == 'w') {
 			avatar.move(4);
