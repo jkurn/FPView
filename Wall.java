@@ -55,17 +55,8 @@ public class Wall extends FPPolygon {
 			
 			
 			gl.glPushMatrix();
-			gl.glBegin( GL.GL_POLYGON );  //draw the polygon
+			gl.glBegin( GL.GL_POLYGON );  //draw the wall (?)
 
-			// First we have to work out the normal correctly; make sure it points
-			// in the correct direction.
-			//
-			// this calculation uses the cross product of the first two edges.  It
-			// It is easy to show that the cross product has a y value of:
-			// (y1-y0).(x2-x1)-(x1-x0).(y2-y1). If this is positive, the norma l is (0,1,0),
-			// if this is negative then it is (0, -1, 0). This works for conca ve polygons.
-			// This should actually be stored in a field somewhere, so it is n ot continually
-			// recalculated but ...
 			Point2D p0 =  pts2d.get(0);
 			Point2D p1 =  pts2d.get(1);
 			

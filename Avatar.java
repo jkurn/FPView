@@ -81,6 +81,7 @@ public class Avatar {
 		gl.glPushMatrix();
 		gl.glTranslated(pos.x, pos.y - height / 2, pos.z);
 		gl.glScaled(5, height, 25);
+		gl.glRotated((turnframes * turnStep), dir.x, dir.y, dir.z); // !! does not rotate it? !!
 		GLUT glut = new GLUT();
 		glut.glutSolidCube(1);
 		gl.glPopMatrix();
