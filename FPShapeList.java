@@ -120,7 +120,7 @@ public class FPShapeList extends ArrayList<FPShape> {
 	 */
 
 	public void read(String sourcename) throws IOException,
-	MalformedShapeException {
+			MalformedShapeException {
 		InputStream ins;
 		String s = "";
 
