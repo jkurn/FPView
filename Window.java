@@ -6,6 +6,7 @@ import javax.media.opengl.*;
 import com.sun.opengl.util.*;
 import com.sun.opengl.util.texture.*;
 
+/** THIS FILE HAS CHANGED **/
 public class Window extends Wall {
 
 	public float lineWidth() {
@@ -35,7 +36,7 @@ public class Window extends Wall {
 			
 			gl.glPushMatrix();
 			gl.glBegin( GL.GL_POLYGON );  //use tesselation?
-
+			
 			Point2D p0 =  pts2d.get(0);
 			Point2D p1 =  pts2d.get(1);
 			

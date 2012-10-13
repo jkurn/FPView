@@ -166,6 +166,7 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 
 	public void keyPressed(KeyEvent evt) {
 
+		/** changing point of views */
 		if (evt.getKeyChar() == 'f') {
 			if (viewType == FIRST_PERSON_VIEW) {
 				viewType = THIRD_PERSON_VIEW;
@@ -173,7 +174,6 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 				viewType = FIRST_PERSON_VIEW;
 			}
 		}
-
 		if (evt.getKeyChar() == 'v') {
 			if (viewType == THIRD_PERSON_VIEW) {
 				// cycle through viewpoints, by cycling list of viewPoints 
@@ -186,11 +186,12 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 				}
 			}
 		}
-
 		if (evt.getKeyChar() == 'p') {
 			// adds viewpoint 
 			System.out.println(new ViewPoint(viewpos,viewdir));
 		}
+		
+		/** avatar movement */
 		if (evt.getKeyChar() == 'w') {
 			// moves forward
 			avatar.move(4);
@@ -202,12 +203,42 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		if (evt.getKeyChar() == 'a') {
 			// looks left
 			avatar.rotate(4);
-			
 		}
 		if (evt.getKeyChar() == 'd') {
 			// looks right
 			avatar.rotate(-4);
 		}
+
+		/** door animation */
+		if (evt.getKeyChar() == '1') {
+			//toggle open first door if present
+
+		}
+		if (evt.getKeyChar() == '2') {
+
+		}
+		if (evt.getKeyChar() == '3') {
+
+		}
+		if (evt.getKeyChar() == '4') {
+
+		}
+		
+		/** light toggle */
+		if (evt.getKeyChar() == '!') {
+			//toggle open first light
+
+		}
+		if (evt.getKeyChar() == '@') {
+
+		}
+		if (evt.getKeyChar() == '#') {
+
+		}
+		if (evt.getKeyChar() == '$') {
+
+		}
+		
 		if (evt.getKeyChar() == 'q')
 			System.exit(0);
 	}
@@ -256,13 +287,13 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		double niceScalingRate = 0.02;
 
 		if (evt.isMetaDown()) {
-			//using right button click (i.e. zooming mode)
-			
+			/** using right button click (i.e. zooming mode) */
+
 			//scale the viewpos to be zooming
 			viewpos = viewpos.add(viewpos.scale(diffY * niceScalingRate));     // !! DOES NOT DO THE SAME THING !!
 		} else {
-			//using left button click (i.e. panning mode)
-			
+			/** using left button click (i.e. panning mode) */
+
 			// {Both of these works for diagonal too} 
 			//looking up and down changes viewdir just by increments
 			viewdir.y += (diffY * niceScalingRate);
