@@ -9,13 +9,10 @@ import com.sun.opengl.util.texture.*;
 /** THIS FILE HAS CHANGED **/
 public class Portal extends FPPolygon {
 
-	private Vector3D normalVector;
-	private boolean normalAlreadyCalculated;
 	public final double portalHeight = 100.0;
 
 	public Portal () {
 		super();
-		this.normalAlreadyCalculated = false;
 	}
 	
 	public String extraName(int i){

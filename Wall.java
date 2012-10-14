@@ -8,13 +8,9 @@ import com.sun.opengl.util.texture.*;
 
 /** THIS FILE HAS CHANGED **/
 public class Wall extends FPPolygon {
-
-	private Vector3D normalVector;
-	private boolean normalAlreadyCalculated;
 	
 	public Wall() {
 		super();
-		this.normalAlreadyCalculated = false;
 	}
 	
 	public String extraName(int i) {
@@ -23,6 +19,15 @@ public class Wall extends FPPolygon {
 
 	public float lineWidth() {
 		return 4.0f;
+	}
+	
+	@Override
+	public Vector3D collide(Vector3D from, Vector3D to) {
+		if (contains((int) Math.round(to.x),(int) Math.round(to.z))) {
+			return from;
+		} else {
+			return null;
+		}
 	}
 
 	/** paint the wall using gl. */
@@ -55,12 +60,12 @@ public class Wall extends FPPolygon {
 			
 			gl.glTexCoord2d(0, 0);
 			gl.glVertex3d(p0.x, extra[0], p0.y);
-			gl.glTexCoord2d(0, 1);
+			gl.glTexCoord2d(0, scale * extra[1]/100);
 			gl.glVertex3d(p0.x, extra[1], p0.y);
 
-			gl.glTexCoord2d(1, 1); 
+			gl.glTexCoord2d(scale*p0.x/100, scale * extra[1]/100); 
 			gl.glVertex3d(p1.x, extra[1], p1.y);
-			gl.glTexCoord2d(1, 0);
+			gl.glTexCoord2d(scale*p0.x/100, 0);
 			gl.glVertex3d(p1.x, extra[0], p1.y);
 
 			gl.glEnd();

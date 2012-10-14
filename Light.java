@@ -84,9 +84,8 @@ public class Light extends FPPolygon {
 	// shines light if light is on, else disables it
 	public void shineLight(GL gl, int index) {
 		if (isOn()) {
-			// gets color from fill, the parent class
 			gl.glLightfv(GL.GL_LIGHT1 + index, GL.GL_POSITION, getPosition(), 0);
-			gl.glLightfv(GL.GL_LIGHT1 + index, GL.GL_DIFFUSE, fill.getColorComponents(new float[4]), 0);
+			gl.glLightfv(GL.GL_LIGHT1 + index, GL.GL_DIFFUSE, getFillColor().getColorComponents(new float[4]), 0); // gets color from fill, one of the parent class
 			gl.glEnable(GL.GL_LIGHT1 + index);
 		} else {
 			// turns off current light

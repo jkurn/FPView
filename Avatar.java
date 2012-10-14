@@ -82,6 +82,7 @@ public class Avatar {
 
 		gl.glPushMatrix();
 		gl.glTranslated(pos.x, pos.y - height / 2, pos.z);
+		gl.glTexCoord3d(1, 1, 2);
 		gl.glRotated(Math.toDegrees(angle), 0, 1, 0);
 		gl.glScaled(5, height, 25);
 		

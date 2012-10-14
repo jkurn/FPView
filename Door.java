@@ -11,18 +11,26 @@ public class Door extends Wall {
 
 	private double angle;
 	private boolean doorIsOpen;
-	private Vector3D normalVector;
-	private boolean normalAlreadyCalculated;
 
 	public Door () {
 		super();
-		this.normalAlreadyCalculated = false;
 	}
 	
 	public float lineWidth() {
 		return 2.0f;
 	}
 
+	@Override
+	public Vector3D collide(Vector3D from, Vector3D to) {
+		if (doorIsOpen) {
+			return null;	//lets avatar move through door
+		} else if (contains((int) Math.round(to.x),(int) Math.round(to.z))) {
+			return from;
+		} else {
+			return null;
+		}
+	}
+	
 	/** paint this door into g. */
 	public void paint(GL gl, GLDrawable glc) {
 

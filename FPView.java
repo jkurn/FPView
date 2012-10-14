@@ -308,7 +308,7 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		int diffX = prevx - currX;
 		int diffY = prevy - currY;
 
-		double niceScalingRate = 0.02;
+		double niceScalingRate = 0.01;
 
 		if (evt.isMetaDown()) {
 			/** using right button click (i.e. zooming mode) */

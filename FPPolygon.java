@@ -74,6 +74,7 @@ public class FPPolygon extends FPShape {
 			Point2D p1 =  pts2d.get(1);
 			Point2D p2 =  pts2d.get(2);
 
+			// so it does not need to recalculate the normal again by saving it
 			if (!normalAlreadyCalculated) {
 				normalisePolygon(gl, p0, p1, p2);
 			}
@@ -105,6 +106,7 @@ public class FPPolygon extends FPShape {
 		this.normalAlreadyCalculated = true;
 	}
 
+	// took this out of render3D function to be shared by all classes
 	GL textureFilling (GL gl, GLDrawable glc) {
 		if (texture == null) {
 			setColor(gl,fill);
