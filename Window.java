@@ -14,6 +14,7 @@ public class Window extends Wall {
 	}
 
 	public void render3D(GL gl, GLDrawable glc) {
+		if (pts2d.size() < 2) return;	//windows need 2 points
 		if (fill != null || texture != null){
 			if (texture == null) {
 				setColor(gl,fill);

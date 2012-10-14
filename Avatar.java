@@ -75,7 +75,7 @@ public class Avatar {
 	}
 
 	public void render3D(GL gl, GLDrawable glc) {
-		setColor(gl, Color.white);
+		setColor(gl, Color.magenta);
 		gl.glDisable(GL.GL_TEXTURE_2D);
 
 		gl.glPushMatrix();
@@ -83,7 +83,8 @@ public class Avatar {
 		gl.glScaled(5, height, 25);
 		gl.glRotated((turnframes * turnStep), dir.x, dir.y, dir.z); // !! does not rotate it? !!
 		GLUT glut = new GLUT();
-		glut.glutSolidCube(1);
+		// awesome avatar for maximum fun
+		glut.glutSolidTorus(0.4, 0.8, 10, 20);
 		gl.glPopMatrix();
 	}
 

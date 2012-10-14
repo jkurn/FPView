@@ -34,6 +34,7 @@ public class Wall extends FPPolygon {
 	}
 
 	public void render3D(GL gl, GLDrawable glc) {
+		if (pts2d.size() < 2) return;	//wall needs 2 points
 		if (fill != null || texture != null){
 			if (texture == null) {
 				setColor(gl,fill);
