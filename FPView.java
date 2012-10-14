@@ -290,9 +290,7 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 			/** using right button click (i.e. zooming mode) */
 
 			//scale the viewpos to be zooming
-			viewpos.x += (diffY);
-			viewpos = viewpos.add(viewpos.scale(diffY * niceScalingRate));     // !! DOES NOT DO THE SAME THING !!
-			
+			viewpos = viewpos.add(viewdir.scale(diffY));	//scale to viewdirection instead
 		} else {
 			/** using left button click (i.e. panning mode) */
 

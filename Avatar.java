@@ -14,6 +14,7 @@ public class Avatar {
 	int moveframes;
 	Vector3D pos;
 	Vector3D dir;
+	double angle;
 
 	float t = 0;
 
@@ -41,6 +42,9 @@ public class Avatar {
 			turnIncrement = -turnStep;
 		}
 		turnframes = Math.abs(noframes);
+		
+		//updating angle
+		angle = angle + (turnIncrement * turnframes);
 	}
 
 	// update position, checking for collisions
@@ -75,16 +79,17 @@ public class Avatar {
 	}
 
 	public void render3D(GL gl, GLDrawable glc) {
-		setColor(gl, Color.magenta);
+		setColor(gl, Color.ORANGE);
 		gl.glDisable(GL.GL_TEXTURE_2D);
 
 		gl.glPushMatrix();
 		gl.glTranslated(pos.x, pos.y - height / 2, pos.z);
+		gl.glRotated(Math.toDegrees(angle), 0, 1, 0);
 		gl.glScaled(5, height, 25);
-		gl.glRotated((turnframes * turnStep), dir.x, dir.y, dir.z); // !! does not rotate it? !!
+		
 		GLUT glut = new GLUT();
 		// awesome avatar for maximum fun
-		glut.glutSolidTorus(0.4, 0.8, 10, 20);
+		glut.glutSolidCube(1);
 		gl.glPopMatrix();
 	}
 

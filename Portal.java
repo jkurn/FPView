@@ -79,15 +79,33 @@ public class Portal extends FPPolygon {
 			Point2D p2 = pts2d.get(2);
 			Point2D p3 = pts2d.get(3);
 
+			// for the first portal
 			gl.glTexCoord2d(0, 0); 
 			gl.glVertex3d(p0.x, extra[0], p0.y);
 			gl.glTexCoord2d(0, 1);
-			gl.glVertex3d(p0.x, extra[1], p0.y);
+			gl.glVertex3d(p0.x, extra[0] + 100, p0.y);	//+100 because it is 100 units high
 
 			gl.glTexCoord2d(1, 1); 
-			gl.glVertex3d(p1.x, extra[1], p1.y);
+			gl.glVertex3d(p1.x, extra[0] + 100, p1.y);
 			gl.glTexCoord2d(1, 0);
 			gl.glVertex3d(p1.x, extra[0], p1.y);
+			
+			gl.glEnd();
+			gl.glPopMatrix();
+			
+			// for the second portal
+			gl.glPushMatrix();
+			gl.glBegin( GL.GL_POLYGON );
+
+			gl.glTexCoord2d(0, 0); 
+			gl.glVertex3d(p2.x, extra[1], p2.y);
+			gl.glTexCoord2d(0, 1);
+			gl.glVertex3d(p2.x, extra[1] + 100, p2.y);
+
+			gl.glTexCoord2d(1, 1); 
+			gl.glVertex3d(p3.x, extra[1] + 100, p3.y);
+			gl.glTexCoord2d(1, 0);
+			gl.glVertex3d(p3.x, extra[1], p3.y);
 
 			gl.glEnd();
 			gl.glPopMatrix();
