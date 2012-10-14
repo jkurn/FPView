@@ -58,6 +58,7 @@ public class Wall extends FPPolygon {
 
 			normaliseObject(gl);
 			
+			
 			gl.glTexCoord2d(0, 0);
 			gl.glVertex3d(p0.x, extra[0], p0.y);
 			gl.glTexCoord2d(0, scale * extra[1]/100);

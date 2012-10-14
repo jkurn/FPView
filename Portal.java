@@ -23,14 +23,18 @@ public class Portal extends FPPolygon {
 		return 4.0f;
 	}
 	
-	// edited to return to second portal
+	// edited to return to second portal if it hits the first portal
 	@Override
 	public Vector3D collide(Vector3D from, Vector3D to) {
+		
+		// uses this class' contains, to check that it it collides with first 'in' portal
 		if (contains(0,(int) Math.round(to.x),(int) Math.round(to.z))) {
 			Point2D p2 = pts2d.get(2);
 			Point2D p3 = pts2d.get(3);
 			double midX = Math.abs((p2.x + p3.x)/2);
 			double midY = Math.abs((p2.y + p3.y)/2);
+			
+			// teleports to second 'out' portal position
 			return new Vector3D(midX, extra[1] + portalHeight, midY);
 		} else {
 			return null;
@@ -74,11 +78,13 @@ public class Portal extends FPPolygon {
 
 			gl.glPushMatrix();
 			
+			// normalise for first 'in' portal
 			Vector3D v0 = new Vector3D (pts2d.get(0).x, extra[0], pts2d.get(0).y);
 			Vector3D v1 = new Vector3D (pts2d.get(1).x, extra[0], pts2d.get(1).y);
 			Vector3D v2 = new Vector3D (pts2d.get(0).x, extra[1], pts2d.get(0).y);
 			normalisePortal(gl, v0, v1, v2);
 			
+			// normalise for second 'out' portal
 			Vector3D v3 = new Vector3D (pts2d.get(2).x, extra[0], pts2d.get(2).y);
 			Vector3D v4 = new Vector3D (pts2d.get(3).x, extra[0], pts2d.get(3).y);
 			Vector3D v5 = new Vector3D (pts2d.get(2).x, extra[1], pts2d.get(2).y);
@@ -91,7 +97,7 @@ public class Portal extends FPPolygon {
 			Point2D p3 = pts2d.get(3);
 			
 
-			// for the first portal
+			// for the first 'in' portal
 			gl.glTexCoord2d(0, 0); 
 			gl.glVertex3d(p0.x, extra[0], p0.y);
 			gl.glTexCoord2d(0, 1);
@@ -105,7 +111,7 @@ public class Portal extends FPPolygon {
 			gl.glEnd();
 			gl.glPopMatrix();
 			
-			// for the second portal
+			// for the second 'out' portal
 			gl.glPushMatrix();
 			gl.glBegin( GL.GL_POLYGON );
 
