@@ -146,8 +146,12 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 			nightlight(gl);
 			gl.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		}
+		// goes through all lights and shine those which are on
+		for (int i = 0; i < shapeList.getLights().size(); i++) {
+			shapeList.getLights().get(i).shineLight(gl, i);
+		}
 		gl.glEnable(GL.GL_LIGHTING);
-
+		
 		gl.glPushMatrix();
 		// Render the shapes.
 		shapeList.render3D(gl, glc);
@@ -230,23 +234,33 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 				doorList.get(elementSelection).toggleDoor();
 			}
 		}
+		
 		/** light toggle */
+		ArrayList<Light> lightList = shapeList.getLights();
 		if (evt.getKeyChar() == 'n') {
 			//changes from night to day
 			isDayTime ^= 1;
 		}
 		if (evt.getKeyChar() == '!') {
 			//toggle open first light
-
+			if (lightList.size() > 0) {
+				lightList.get(0).toggle();
+			}
 		}
 		if (evt.getKeyChar() == '@') {
-
+			if (lightList.size() > 1) {
+				lightList.get(1).toggle();
+			}
 		}
 		if (evt.getKeyChar() == '#') {
-
+			if (lightList.size() > 2) {
+				lightList.get(2).toggle();
+			}
 		}
 		if (evt.getKeyChar() == '$') {
-
+			if (lightList.size() > 3) {
+				lightList.get(3).toggle();
+			}
 		}
 
 		if (evt.getKeyChar() == 'q')

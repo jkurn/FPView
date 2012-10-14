@@ -62,6 +62,16 @@ public class Portal extends FPPolygon {
 			textureFilling(gl, glc);
 
 			gl.glPushMatrix();
+			
+			Vector3D v0 = new Vector3D (pts2d.get(0).x, extra[0], pts2d.get(0).y);
+			Vector3D v1 = new Vector3D (pts2d.get(1).x, extra[0], pts2d.get(1).y);
+			Vector3D v2 = new Vector3D (pts2d.get(0).x, extra[1], pts2d.get(0).y);
+			normalisePortal(gl, v0, v1, v2);
+			
+			Vector3D v3 = new Vector3D (pts2d.get(2).x, extra[0], pts2d.get(2).y);
+			Vector3D v4 = new Vector3D (pts2d.get(3).x, extra[0], pts2d.get(3).y);
+			Vector3D v5 = new Vector3D (pts2d.get(2).x, extra[1], pts2d.get(2).y);
+			normalisePortal(gl, v3, v4, v5);
 			gl.glBegin( GL.GL_POLYGON );  //draw the portal
 
 			Point2D p0 = pts2d.get(0);
@@ -103,6 +113,12 @@ public class Portal extends FPPolygon {
 		}
 	}
 
+	void normalisePortal (GL gl, Vector3D v0, Vector3D v1, Vector3D v2) {
+		Vector3D a = v2.subtract(v0);
+		Vector3D b = v1.subtract(v0);
+		Vector3D n = a.cross(b);
+		gl.glNormal3d(n.x, n.y, n.z);
+	}
 
 	/** add a control point */
 	public void addPoint(Point p) {
