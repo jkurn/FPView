@@ -22,6 +22,20 @@ public class Portal extends FPPolygon {
 	public float lineWidth() {
 		return 4.0f;
 	}
+	
+	// edited to return to second portal
+	@Override
+	public Vector3D collide(Vector3D from, Vector3D to) {
+		if (contains(0,(int) Math.round(to.x),(int) Math.round(to.z))) {
+			Point2D p2 = pts2d.get(2);
+			Point2D p3 = pts2d.get(3);
+			double midX = Math.abs((p2.x + p3.x)/2);
+			double midY = Math.abs((p2.y + p3.y)/2);
+			return new Vector3D(midX, extra[1] + portalHeight, midY);
+		} else {
+			return null;
+		}
+	}
 
 	/** paint the portal using gl.*/
 	public void paint(GL gl, GLDrawable glc){
@@ -98,10 +112,10 @@ public class Portal extends FPPolygon {
 			gl.glTexCoord2d(0, 0); 
 			gl.glVertex3d(p2.x, extra[1], p2.y);
 			gl.glTexCoord2d(0, 1);
-			gl.glVertex3d(p2.x, extra[1] + 100, p2.y);
+			gl.glVertex3d(p2.x, extra[1] + portalHeight, p2.y);
 
 			gl.glTexCoord2d(1, 1); 
-			gl.glVertex3d(p3.x, extra[1] + 100, p3.y);
+			gl.glVertex3d(p3.x, extra[1] + portalHeight, p3.y);
 			gl.glTexCoord2d(1, 0);
 			gl.glVertex3d(p3.x, extra[1], p3.y);
 
@@ -124,7 +138,6 @@ public class Portal extends FPPolygon {
 		}
 	}
 
-
 	/** remove specified control point - not allowed for a portal*/
 	public void removePoint() {
 		return;
@@ -140,6 +153,4 @@ public class Portal extends FPPolygon {
 	public boolean contains(int x,int y){
 		return contains(0,x,y) || contains(2,x,y) ;
 	}
-
-
 }
