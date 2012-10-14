@@ -9,6 +9,14 @@ import com.sun.opengl.util.texture.*;
 /** THIS FILE HAS CHANGED **/
 public class Wall extends FPPolygon {
 
+	private Vector3D normalVector;
+	private boolean normalAlreadyCalculated;
+	
+	public Wall() {
+		super();
+		this.normalAlreadyCalculated = false;
+	}
+	
 	public String extraName(int i) {
 		return i == 0 ? "Base" : "Top";
 	}
@@ -36,44 +44,39 @@ public class Wall extends FPPolygon {
 	public void render3D(GL gl, GLDrawable glc) {
 		if (pts2d.size() < 2) return;	//wall needs 2 points
 		if (fill != null || texture != null){
-			if (texture == null) {
-				setColor(gl,fill);
-				gl.glDisable( GL.GL_TEXTURE_2D );
-			} else {
-				setColor(gl, Color.white);
-				Texture gltexture = texture.getTexture(glc);
-				gltexture.enable();
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT );
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT );
-				gl.glTexEnvf( GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE,
-						GL.GL_MODULATE);
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER ,
-						GL.GL_NEAREST);
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER ,
-						GL.GL_NEAREST);
-				gltexture.bind();
-			}
-			
-			
+			textureFilling(gl, glc);
 			gl.glPushMatrix();
 			gl.glBegin( GL.GL_POLYGON );  //draw the wall (?)
 
 			Point2D p0 =  pts2d.get(0);
 			Point2D p1 =  pts2d.get(1);
+
+			normaliseObject(gl);
 			
-			gl.glTexCoord2d(0, 0); // texture not done properly yet?
+			gl.glTexCoord2d(0, 0);
 			gl.glVertex3d(p0.x, extra[0], p0.y);
 			gl.glTexCoord2d(0, 1);
-			gl.glVertex3d(p0.x, extra[0] + extra[1], p0.y);
-			
+			gl.glVertex3d(p0.x, extra[1], p0.y);
+
 			gl.glTexCoord2d(1, 1); 
-			gl.glVertex3d(p1.x, extra[0] + extra[1], p1.y);
+			gl.glVertex3d(p1.x, extra[1], p1.y);
 			gl.glTexCoord2d(1, 0);
 			gl.glVertex3d(p1.x, extra[0], p1.y);
-			
+
 			gl.glEnd();
 			gl.glPopMatrix();
 		}
+	}
+	
+	void normaliseObject (GL gl) {
+		Vector3D v0 = new Vector3D (pts2d.get(0).x, extra[0], pts2d.get(0).y);
+		Vector3D v1 = new Vector3D (pts2d.get(1).x, extra[0], pts2d.get(1).y);
+		Vector3D v2 = new Vector3D (pts2d.get(0).x, extra[1], pts2d.get(0).y);
+		
+		Vector3D a = v2.subtract(v0);
+		Vector3D b = v1.subtract(v0);
+		Vector3D n = a.cross(b);
+		gl.glNormal3d(n.x, n.y, n.z);
 	}
 
 	/** add a control point */

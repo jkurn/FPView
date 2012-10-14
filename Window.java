@@ -41,6 +41,8 @@ public class Window extends Wall {
 			Point2D p0 =  pts2d.get(0);
 			Point2D p1 =  pts2d.get(1);
 			
+			normaliseObject(gl);
+			
 			// starts from base to 1/3 of height
 			gl.glTexCoord2d(0, 0); 
 			gl.glVertex3d(p0.x, extra[0], p0.y);
@@ -61,14 +63,14 @@ public class Window extends Wall {
 			
 			// starts from 2/3 height to top of height
 			gl.glTexCoord2d(0, 0); 
-			gl.glVertex3d(p0.x, extra[0] + (2 * extra[1]/3), p0.y);
+			gl.glVertex3d(p0.x, (2 * extra[1]/3), p0.y);
 			gl.glTexCoord2d(0, 1);
-			gl.glVertex3d(p0.x, extra[0] + extra[1], p0.y);
+			gl.glVertex3d(p0.x, extra[1], p0.y);
 			
 			gl.glTexCoord2d(1, 1); 
-			gl.glVertex3d(p1.x, extra[0] + extra[1], p1.y);
+			gl.glVertex3d(p1.x, extra[1], p1.y);
 			gl.glTexCoord2d(1, 0);
-			gl.glVertex3d(p1.x, extra[0] + (2 * extra[1]/3), p1.y);
+			gl.glVertex3d(p1.x, (2 * extra[1]/3), p1.y);
 			
 			gl.glEnd();
 			gl.glPopMatrix();

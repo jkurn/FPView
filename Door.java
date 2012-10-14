@@ -11,6 +11,13 @@ public class Door extends Wall {
 
 	private double angle;
 	private boolean doorIsOpen;
+	private Vector3D normalVector;
+	private boolean normalAlreadyCalculated;
+
+	public Door () {
+		super();
+		this.normalAlreadyCalculated = false;
+	}
 	
 	public float lineWidth() {
 		return 2.0f;
@@ -45,24 +52,8 @@ public class Door extends Wall {
 	public void render3D(GL gl, GLDrawable glc) {
 		if (pts2d.size() < 2) return;	//doors need 2 points
 		if (fill != null || texture != null){
-			if (texture == null) {
-				setColor(gl,fill);
-				gl.glDisable( GL.GL_TEXTURE_2D );
-			} else {
-				setColor(gl, Color.white);
-				Texture gltexture = texture.getTexture(glc);
-				gltexture.enable();
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT );
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT );
-				gl.glTexEnvf( GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE,
-						GL.GL_MODULATE);
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER ,
-						GL.GL_NEAREST);
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER ,
-						GL.GL_NEAREST);
-				gltexture.bind();
-			}
-			
+			textureFilling(gl, glc);
+
 			// check for opening or closing animation
 			if (angle <= 90 && doorIsOpen) {
 				// turn the door by a little bit
@@ -71,15 +62,17 @@ public class Door extends Wall {
 				// turn door the other way
 				angle--;
 			}
-			
+
 			gl.glPushMatrix();
-			
+
+			Point2D p0 =  pts2d.get(0);
+			Point2D p1 =  pts2d.get(1);
+
+			normaliseObject(gl);
+
 			// translation and rotation
 			// (since opengl does matrix calc backwards, 
 			// do in order of translation from origin, rotation, and translate to origin
-			Point2D p0 =  pts2d.get(0);
-			Point2D p1 =  pts2d.get(1);
-			
 			gl.glTranslated(p0.x, 0, p0.y);
 			gl.glRotated(-angle, 0, 1, 0);	// to accomodate correct rotation
 			gl.glTranslated(-p0.x, 0, -p0.y);
@@ -89,17 +82,17 @@ public class Door extends Wall {
 			gl.glVertex3d(p0.x, extra[0], p0.y);
 			gl.glTexCoord2d(0, 1);
 			gl.glVertex3d(p0.x, extra[1], p0.y);
-			
+
 			gl.glTexCoord2d(1, 1); 
 			gl.glVertex3d(p1.x, extra[1], p1.y);
 			gl.glTexCoord2d(1, 0);
 			gl.glVertex3d(p1.x, extra[0], p1.y);
-			
+
 			gl.glEnd();
 			gl.glPopMatrix();
 		}
 	}
-	
+
 	public void toggleDoor() {
 		doorIsOpen ^= true;
 	}

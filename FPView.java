@@ -36,6 +36,9 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 	static final int FIRST_PERSON_VIEW = 1;
 	static final int THIRD_PERSON_VIEW = 2;
 	int viewType = THIRD_PERSON_VIEW;
+	static final int DAY_TIME = 0;
+	static final int NIGHT_TIME = 1;
+	int isDayTime = DAY_TIME;
 
 	public FPView(String filename) {
 
@@ -130,11 +133,20 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		if (viewType == THIRD_PERSON_VIEW) {
 			setView(glu, viewpos, viewdir);
 		}
-
 		// ... otherwise use information from avatar to do it.
 		else {
 			setView(glu, avatar.currentPos(), avatar.currentDir());
 		}
+
+		// checks day or night, and adjust background and lighting accodingly
+		if (isDayTime == DAY_TIME) {
+			daylight(gl);
+			gl.glClearColor(0.6f, 0.6f, 0.9f, 1.0f);
+		} else {
+			nightlight(gl);
+			gl.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		}
+		gl.glEnable(GL.GL_LIGHTING);
 
 		gl.glPushMatrix();
 		// Render the shapes.
@@ -147,7 +159,6 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		}
 
 		gl.glPopMatrix();
-
 	}
 
 	/** This method handles things if display depth changes */
@@ -211,29 +222,19 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 
 		/** door animation */
 		ArrayList<Door> doorList = shapeList.getDoors();
-		if (evt.getKeyChar() == '1') {
-			//toggle open first door if present
-			if (doorList.size() > 0) {
-				doorList.get(0).toggleDoor();
+		if (evt.getKeyChar() >= '1' && evt.getKeyChar() <= '9') {
+			int elementSelection = evt.getKeyCode() - '1';
+			//toggle open door if present
+			// and makes sure we aren't selecting outside the array size
+			if (doorList.size() > elementSelection) {
+				doorList.get(elementSelection).toggleDoor();
 			}
 		}
-		if (evt.getKeyChar() == '2') {
-			if (doorList.size() > 1) {
-				doorList.get(1).toggleDoor();
-			}
-		}
-		if (evt.getKeyChar() == '3') {
-			if (doorList.size() > 2) {
-				doorList.get(2).toggleDoor();
-			}
-		}
-		if (evt.getKeyChar() == '4') {
-			if (doorList.size() > 3) {
-				doorList.get(3).toggleDoor();
-			}
-		}
-
 		/** light toggle */
+		if (evt.getKeyChar() == 'n') {
+			//changes from night to day
+			isDayTime ^= 1;
+		}
 		if (evt.getKeyChar() == '!') {
 			//toggle open first light
 
@@ -297,12 +298,10 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 
 		if (evt.isMetaDown()) {
 			/** using right button click (i.e. zooming mode) */
-
 			//scale the viewpos to be zooming
 			viewpos = viewpos.add(viewdir.scale(diffY));	//scale to viewdirection instead
 		} else {
 			/** using left button click (i.e. panning mode) */
-
 			// {Both of these works for diagonal too} 
 			//looking up and down changes viewdir just by increments
 			viewdir.y += (diffY * niceScalingRate);
@@ -315,4 +314,16 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		prevy = currY;
 	}
 
+	public void daylight(GL gl) {
+		// light position is -1, 1, -1, and is directional lighting
+		gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, new float[] {-1, 1, -1, 0}, 0);
+		// light color is white
+		gl.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, new float[] {0.6f, 0.6f, 0.6f, 0}, 0);
+		gl.glEnable(GL.GL_LIGHT0);
+	} 
+
+	public void nightlight(GL gl) {
+		// disable lighting at night
+		gl.glDisable(GL.GL_LIGHT0);
+	}
 }

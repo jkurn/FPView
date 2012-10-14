@@ -4,11 +4,15 @@ import java.awt.Color;
 import java.awt.Polygon;
 import java.util.*;
 import javax.media.opengl.*;
+
 import com.sun.opengl.util.texture.*;
 
 
 public class FPPolygon extends FPShape {
 
+	private Vector3D normalVector;
+	private boolean normalAlreadyCalculated;
+	
 	public String extraName(int i){
 		return i==0 ? "Height" : null;
 	}
@@ -18,6 +22,7 @@ public class FPPolygon extends FPShape {
 
 	public FPPolygon() {
 		pts2d = new ArrayList<Point2D>();
+		normalAlreadyCalculated = false;
 	}
 
 	public String extraName(){
@@ -58,50 +63,21 @@ public class FPPolygon extends FPShape {
 		}
 	}
 
-
 	public void render3D(GL gl, GLDrawable glc){
 		if (pts2d.size() < 3) return;
 		if (fill != null || texture != null){
-			if (texture == null) {
-				setColor(gl,fill);
-				gl.glDisable( GL.GL_TEXTURE_2D );
-			} else {
-				setColor(gl, Color.white);
-				Texture gltexture = texture.getTexture(glc);
-				gltexture.enable();
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT );
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT );
-				gl.glTexEnvf( GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE,
-						GL.GL_MODULATE);
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER ,
-						GL.GL_NEAREST);
-				gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER ,
-						GL.GL_NEAREST);
-				gltexture.bind();
-			}
+			textureFilling(gl, glc);
 			gl.glPushMatrix();
 			gl.glBegin( GL.GL_POLYGON );  //draw the polygon
 
-			// First we have to work out the normal correctly; make sure it points
-			// in the correct direction.
-			//
-			// this calculation uses the cross product of the first two edges.  It
-			// It is easy to show that the cross product has a y value of:
-			// (y1-y0).(x2-x1)-(x1-x0).(y2-y1). If this is positive, the normal is (0,1,0),
-			// if this is negative then it is (0, -1, 0). This works for concave polygons.
-			// This should actually be stored in a field somewhere, so it is not continually
-			// recalculated but ...
 			Point2D p0 =  pts2d.get(0);
 			Point2D p1 =  pts2d.get(1);
 			Point2D p2 =  pts2d.get(2);
-			double ycross = (p1.y-p0.y)*(p2.x-p1.x)-(p1.x-p0.x)*(p2.y-p1.y);
-			// System.out.println("ycross = " + ycross);
-			if(ycross >= 0){
-				gl.glNormal3d(0,1,0);
-			} else {
-				gl.glNormal3d(0,-1,0);
+
+			if (!normalAlreadyCalculated) {
+				normalisePolygon(gl, p0, p1, p2);
 			}
-			
+			gl.glNormal3d(normalVector.x, normalVector.y, normalVector.z);
 			for(Point2D p : pts2d) {
 				gl.glTexCoord2d(scale*p.x/100, scale*p.y/100); //dodgy texture  scaling
 				gl.glVertex3d(p.x, extra[0], p.y);
@@ -110,8 +86,45 @@ public class FPPolygon extends FPShape {
 			gl.glPopMatrix();
 		}
 	}
+	
+	// this function is to prevent recalculating normal
+	Vector3D getNormalVector() {
+		return this.normalVector;
+	}
+	
+	void normalisePolygon (GL gl, Point2D p0, Point2D p1, Point2D p2) {
+		double ycross = (p1.y-p0.y)*(p2.x-p1.x)-(p1.x-p0.x)*(p2.y-p1.y);
+		
+		if (ycross >= 0) {
+			gl.glNormal3d(0,1,0);
+			this.normalVector = new Vector3D (0, 1, 0);
+		} else {
+			gl.glNormal3d(0,-1,0);
+			this.normalVector = new Vector3D (0, -1, 0);
+		}
+		this.normalAlreadyCalculated = true;
+	}
 
-
+	GL textureFilling (GL gl, GLDrawable glc) {
+		if (texture == null) {
+			setColor(gl,fill);
+			gl.glDisable( GL.GL_TEXTURE_2D );
+		} else {
+			setColor(gl, Color.white);
+			Texture gltexture = texture.getTexture(glc);
+			gltexture.enable();
+			gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT );
+			gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT );
+			gl.glTexEnvf( GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE,
+					GL.GL_MODULATE);
+			gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER ,
+					GL.GL_NEAREST);
+			gl.glTexParameteri( GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER ,
+					GL.GL_NEAREST);
+			gltexture.bind();
+		}
+		return gl;
+	}
 
 	static final int EPSILON = 6;  /* distance for picking */
 
