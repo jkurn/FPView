@@ -64,10 +64,10 @@ public class Wall extends FPPolygon {
 			gl.glTexCoord2d(0, 0); // texture not done properly yet?
 			gl.glVertex3d(p0.x, extra[0], p0.y);
 			gl.glTexCoord2d(0, 1);
-			gl.glVertex3d(p0.x, extra[1], p0.y);
+			gl.glVertex3d(p0.x, extra[0] + extra[1], p0.y);
 			
 			gl.glTexCoord2d(1, 1); 
-			gl.glVertex3d(p1.x, extra[1], p1.y);
+			gl.glVertex3d(p1.x, extra[0] + extra[1], p1.y);
 			gl.glTexCoord2d(1, 0);
 			gl.glVertex3d(p1.x, extra[0], p1.y);
 			

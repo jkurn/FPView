@@ -34,22 +34,41 @@ public class Window extends Wall {
 				gltexture.bind();
 			}
 			
-			
+			/** creating base of window */
 			gl.glPushMatrix();
-			gl.glBegin( GL.GL_POLYGON );  //use tesselation?
+			gl.glBegin( GL.GL_POLYGON );
 			
 			Point2D p0 =  pts2d.get(0);
 			Point2D p1 =  pts2d.get(1);
 			
-			gl.glTexCoord2d(0, 0); // texture not done properly yet?
+			// starts from base to 1/3 of height
+			gl.glTexCoord2d(0, 0); 
 			gl.glVertex3d(p0.x, extra[0], p0.y);
 			gl.glTexCoord2d(0, 1);
-			gl.glVertex3d(p0.x, extra[1], p0.y);
+			gl.glVertex3d(p0.x, extra[0] + extra[1]/3, p0.y);
 			
 			gl.glTexCoord2d(1, 1); 
-			gl.glVertex3d(p1.x, extra[1], p1.y);
+			gl.glVertex3d(p1.x, extra[0] + extra[1]/3, p1.y);
 			gl.glTexCoord2d(1, 0);
 			gl.glVertex3d(p1.x, extra[0], p1.y);
+			
+			gl.glEnd();
+			gl.glPopMatrix();
+			
+			/** creating top of window */
+			gl.glPushMatrix();
+			gl.glBegin( GL.GL_POLYGON );
+			
+			// starts from 2/3 height to top of height
+			gl.glTexCoord2d(0, 0); 
+			gl.glVertex3d(p0.x, extra[0] + (2 * extra[1]/3), p0.y);
+			gl.glTexCoord2d(0, 1);
+			gl.glVertex3d(p0.x, extra[0] + extra[1], p0.y);
+			
+			gl.glTexCoord2d(1, 1); 
+			gl.glVertex3d(p1.x, extra[0] + extra[1], p1.y);
+			gl.glTexCoord2d(1, 0);
+			gl.glVertex3d(p1.x, extra[0] + (2 * extra[1]/3), p1.y);
 			
 			gl.glEnd();
 			gl.glPopMatrix();

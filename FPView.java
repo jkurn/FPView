@@ -190,7 +190,7 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 			// adds viewpoint 
 			System.out.println(new ViewPoint(viewpos,viewdir));
 		}
-		
+
 		/** avatar movement */
 		if (evt.getKeyChar() == 'w') {
 			// moves forward
@@ -210,20 +210,29 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		}
 
 		/** door animation */
+		ArrayList<Door> doorList = shapeList.getDoors();
 		if (evt.getKeyChar() == '1') {
 			//toggle open first door if present
-
+			if (doorList.size() > 0) {
+				doorList.get(0).toggleDoor();
+			}
 		}
 		if (evt.getKeyChar() == '2') {
-
+			if (doorList.size() > 1) {
+				doorList.get(1).toggleDoor();
+			}
 		}
 		if (evt.getKeyChar() == '3') {
-
+			if (doorList.size() > 2) {
+				doorList.get(2).toggleDoor();
+			}
 		}
 		if (evt.getKeyChar() == '4') {
-
+			if (doorList.size() > 3) {
+				doorList.get(3).toggleDoor();
+			}
 		}
-		
+
 		/** light toggle */
 		if (evt.getKeyChar() == '!') {
 			//toggle open first light
@@ -238,7 +247,7 @@ public class FPView extends Frame implements GLEventListener, KeyListener, Mouse
 		if (evt.getKeyChar() == '$') {
 
 		}
-		
+
 		if (evt.getKeyChar() == 'q')
 			System.exit(0);
 	}

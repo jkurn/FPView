@@ -42,9 +42,7 @@ public class Avatar {
 			turnIncrement = -turnStep;
 		}
 		turnframes = Math.abs(noframes);
-		
-		//updating angle
-		angle = angle + (turnIncrement * turnframes);
+		angle = angle + (turnIncrement * turnframes);	//updating angle
 	}
 
 	// update position, checking for collisions
@@ -88,7 +86,6 @@ public class Avatar {
 		gl.glScaled(5, height, 25);
 		
 		GLUT glut = new GLUT();
-		// awesome avatar for maximum fun
 		glut.glutSolidCube(1);
 		gl.glPopMatrix();
 	}

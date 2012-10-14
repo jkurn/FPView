@@ -9,6 +9,9 @@ import com.sun.opengl.util.texture.*;
 /** THIS FILE HAS CHANGED **/
 public class Door extends Wall {
 
+	private double angle;
+	private boolean doorIsOpen;
+	
 	public float lineWidth() {
 		return 2.0f;
 	}
@@ -60,13 +63,28 @@ public class Door extends Wall {
 				gltexture.bind();
 			}
 			
+			// check for opening or closing animation
+			if (angle <= 90 && doorIsOpen) {
+				// turn the door by a little bit
+				angle++;
+			} else if (!doorIsOpen && angle >= 0){
+				// turn door the other way
+				angle--;
+			}
 			
 			gl.glPushMatrix();
-			gl.glBegin( GL.GL_POLYGON );
-
+			
+			// translation and rotation
+			// (since opengl does matrix calc backwards, 
+			// do in order of translation from origin, rotation, and translate to origin
 			Point2D p0 =  pts2d.get(0);
 			Point2D p1 =  pts2d.get(1);
 			
+			gl.glTranslated(p0.x, 0, p0.y);
+			gl.glRotated(-angle, 0, 1, 0);	// to accomodate correct rotation
+			gl.glTranslated(-p0.x, 0, -p0.y);
+			gl.glBegin( GL.GL_POLYGON );
+
 			gl.glTexCoord2d(0, 0);
 			gl.glVertex3d(p0.x, extra[0], p0.y);
 			gl.glTexCoord2d(0, 1);
@@ -81,5 +99,8 @@ public class Door extends Wall {
 			gl.glPopMatrix();
 		}
 	}
-
+	
+	public void toggleDoor() {
+		doorIsOpen ^= true;
+	}
 }
